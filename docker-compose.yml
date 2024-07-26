@@ -1,0 +1,34 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run serve
+
+  backend: 
+    build:
+      context: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - .env
+  
+  mysql:
+    image: mysql:5.7
+    prots:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

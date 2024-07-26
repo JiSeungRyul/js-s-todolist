@@ -1,0 +1,11 @@
+# Ignore environment variables and secrets
+.env
+
+# Ignore Docker volumes
+mysql-data
+
+# Ignore any MySQL data dumps
+*.sql
+
+# Node modules (for backend and frontend)
+node_modules/

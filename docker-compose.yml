@@ -1,3 +1,5 @@
+version: '1'
+
 services:
   to-do-frontend:
     build:
@@ -14,7 +16,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
     env_file:
       - .env
+    networks:
+      - to-do-network
     command: npm run serve
+    restart: always
 
   to-do-backend: 
     build:
@@ -30,6 +35,9 @@ services:
       - .env
     depends_on:
       - to-do-mysql
+    networks:
+      - to-do-network
+    restart: always
   
   to-do-mysql:
     image: mysql:5.7
@@ -40,11 +48,14 @@ services:
       - .env
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
     networks:
       - to-do-network
 
 networks:
   to-do-network:
+    name: to-do-network
   
 volumes:
   mysql-data:

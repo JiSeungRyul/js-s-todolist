@@ -6,6 +6,7 @@ mysql-data
 
 # Ignore any MySQL data dumps
 *.sql
+!init.sql
 
 # Node modules (for backend and frontend)
 node_modules/

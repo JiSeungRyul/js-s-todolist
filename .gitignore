@@ -9,3 +9,6 @@ mysql-data
 
 # Node modules (for backend and frontend)
 node_modules/
+
+# Ignore the .vscode folder
+.vscode/

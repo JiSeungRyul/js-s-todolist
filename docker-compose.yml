@@ -1,5 +1,3 @@
-version: '1'
-
 services:
   to-do-frontend:
     build:
@@ -48,7 +46,7 @@ services:
       - .env
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init-db/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     networks:
       - to-do-network

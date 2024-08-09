@@ -14,3 +14,7 @@ node_modules/
 
 # Ignore the .vscode folder
 .vscode/
+
+# My Files
+my/
+*.my

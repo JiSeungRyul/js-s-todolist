@@ -6,7 +6,7 @@ FLUSH PRIVILEGES;
 USE tododb;
 
 CREATE TABLE `TEST` (
-  `test_id` INT NOT NULL AUTO_INCREMENT
+  `test_id` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`test_id`))
 ;
 

@@ -17,7 +17,8 @@ services:
       - .env
     networks:
       - to-do-network
-    command: npm run serve
+    command: npm run serve        # DevMode
+    # command: npm run build        # OPMode
     restart: always
 
   to-do-backend: 

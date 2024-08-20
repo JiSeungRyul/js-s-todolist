@@ -8,10 +8,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # node_modules 존재 여부 확인 및 npm install 실행
-RUN if [ ! -d "./node_modules" ]; then npm install; fi
+# RUN if [ ! -d "./node_modules" ]; then npm install; fi
+RUN npm install
 
 # 애플리케이션 소스 코드를 복사
 COPY . .
 
 # 서버 시작
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]

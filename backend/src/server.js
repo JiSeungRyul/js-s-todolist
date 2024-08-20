@@ -11,8 +11,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/test', (req, res) => {
-    res.json({ message: 'API is working!' });
+    res.json({ message: 'API is working!!! plz...' });
   });
+
+app.post('/api/tasks', (req,res) => {
+  res.json({ message: 'API is tasks!' });
+  // const { title, completed } = req.body;
+  // console.log('req data: ', { title, completed });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

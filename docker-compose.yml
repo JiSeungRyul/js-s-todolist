@@ -37,6 +37,8 @@ services:
       - to-do-mysql
     networks:
       - to-do-network
+    command: npm run dev        # DevMode
+    # command: npm run start      # OPMode
     restart: always
   
   to-do-mysql:

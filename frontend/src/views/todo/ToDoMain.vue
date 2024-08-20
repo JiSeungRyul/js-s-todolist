@@ -26,10 +26,20 @@
         </li>
       </ul>
       <p>{{ this.completionRate }}% in progress...</p>
+
+      <p>--------------------------</p>
+      <input
+        type="text"
+        v-model="newTask"
+        placeholder="Enter To Do..."
+      >
+      <button @click="addTask1">입력</button>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ToDoMain',
   data() {
@@ -61,6 +71,19 @@ export default {
     delTask(idx) {
       this.tasks.splice(idx,1);
     },
+    // =============================================
+    async addTask1(){
+      try{
+        const response = await axios.post('http://localhost:5000/api/tasks',{
+          title: this.newTask,
+          completed: false
+        });
+        console.log('addTask: ', response.data);
+        this.newTask = '';
+      } catch(err){
+        console.log('addTask: ', err)
+      }
+    }
   },
   mounted() {
     this.getCurDateTime();

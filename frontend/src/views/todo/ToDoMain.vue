@@ -7,20 +7,20 @@
       <p>What to do next...</p>
       <input 
         type="text" 
-        v-model="newTask" 
+        v-model="newTodo" 
         placeholder="What to do next..."
-        @keyup.enter="addTask"
+        @keyup.enter="addTodo"
       />
       <p>--------------------------</p>
       <p>What to do today...</p>
       <ul>
-        <li v-for="(task,idx) in tasks" :key="idx">
+        <li v-for="item in todos.items" :key="item.item_id">
           <input
             type="checkbox"
-            v-model="task.completed"
+            v-model="item.is_cpt"
           />
-          <span :style="{textDecoration: task.completed ? 'line-through':'none'}">
-            {{ task.title }}
+          <span :style="{ textDecoration: item.is_cpt === 'Y' ? 'line-through' : 'none' }">
+            {{ item.item_title }} {{ item.due_date }}
           </span>
           <button @click="delTask(idx)">X</button>
         </li>
@@ -28,12 +28,6 @@
       <p>{{ this.completionRate }}% in progress...</p>
 
       <p>--------------------------</p>
-      <input
-        type="text"
-        v-model="newTask"
-        placeholder="Enter To Do..."
-      >
-      <button @click="addTask1">입력</button>
     </div>
 </template>
 
@@ -45,41 +39,34 @@ export default {
   data() {
     return {
       curDateTime: '',
-      tasks: [{title:'test', completed:true}],
-      newTask: '',
+      todos: {
+        list_id: null,
+        items:[]
+      },
+      newTodo: '',
       progress: 0,
     }
   },
   methods: {
-    test(){
-      const currentTime = new Date().toLocaleString();
-      console.log(currentTime);
-    },
     getCurDateTime(){
       const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       this.curDateTime = new Date().toLocaleDateString('en-US', options);
     },
-    addTask() {
-      if (this.newTask.trim() !== '') {
-        this.tasks.push({
-          title: this.newTask,
-          completed: false
-        });
-        this.newTask = '';
-      }
-    },
     delTask(idx) {
-      this.tasks.splice(idx,1);
+      this.todos.splice(idx,1);
     },
-    // =============================================
-    async addTask1(){
+    async addTodo(){
       try{
-        const response = await axios.post('http://localhost:5000/api/tasks',{
-          title: this.newTask,
-          completed: false
+        const response = await axios.post('http://localhost:5000/api/todo',{
+          itemTitle: this.newTodo,
+          dueDate: null
         });
         console.log('addTask: ', response.data);
-        this.newTask = '';
+
+        this.todos.list_id = response.data.list_id;
+        this.todos.items = response.data.items;
+        
+        this.newTodo = '';
       } catch(err){
         console.log('addTask: ', err)
       }
@@ -87,17 +74,17 @@ export default {
   },
   mounted() {
     this.getCurDateTime();
-    console.log(this.tasks.length);
+    console.log(this.todos.length);
   },
   computed: {
     completedTaskCount() {
-      return this.tasks.filter(task => task.completed).length;
+      return this.todos.items.filter(item => item.is_cpt === 'Y').length;
     },
     completionRate() {
-      if (this.tasks.length === 0) {
+      if (this.todos.items.length === 0) {
         return 0;
       }
-      return ((this.completedTaskCount / this.tasks.length) * 100).toFixed(2);
+      return ((this.completedTaskCount / this.todos.items.length) * 100).toFixed(2);
     }
   }
 }

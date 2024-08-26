@@ -4,7 +4,7 @@
             <router-link to="/">Home</router-link> |
             <router-link to="/todo">ToDo</router-link>
         </nav>
-        <router-view />
+        <router-view :key="$route.fullPath" />
     </div>
 </template>
 

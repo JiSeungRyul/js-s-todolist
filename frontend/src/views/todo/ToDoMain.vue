@@ -9,84 +9,60 @@
         type="text" 
         v-model="newTodo" 
         placeholder="What to do next..."
+        @input="handleUpdateNewTodo"
         @keyup.enter="addTodo"
       />
       <p>--------------------------</p>
       <p>What to do today...</p>
-      <ul>
+      <ul v-if="todos && todos.items.length">
         <li v-for="item in todos.items" :key="item.item_id">
           <input
             type="checkbox"
-            v-model="item.is_cpt"
+            :checked="item.is_cpt === 'Y'"
+            @change="handleUpdateCpltStatus(item.item_id, $event.target.checked)"
           />
           <span :style="{ textDecoration: item.is_cpt === 'Y' ? 'line-through' : 'none' }">
             {{ item.item_title }} {{ item.due_date }}
           </span>
-          <button @click="delTask(idx)">X</button>
+          <button @click="handleDeleteTodo(item.item_id)">X</button>
         </li>
       </ul>
       <p>{{ this.completionRate }}% in progress...</p>
-
-      <p>--------------------------</p>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+import { updateNewTodo, deleteTodo, updateCpltStatus } from '@/utils/todoMethods';
 
 export default {
   name: 'ToDoMain',
-  data() {
-    return {
-      curDateTime: '',
-      todos: {
-        list_id: null,
-        items:[]
-      },
-      newTodo: '',
-      progress: 0,
-    }
+  computed: {
+    ...mapState({
+      curDateTime: state => state.curDateTime,
+      todos: state => state.todos,
+      newTodo: state => state.newTodo,
+    }),
+    ...mapGetters(['completionRate']),
   },
   methods: {
-    getCurDateTime(){
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      this.curDateTime = new Date().toLocaleDateString('en-US', options);
-    },
-    delTask(idx) {
-      this.todos.splice(idx,1);
-    },
-    async addTodo(){
-      try{
-        const response = await axios.post('http://localhost:5000/api/todo',{
-          itemTitle: this.newTodo,
-          dueDate: null
-        });
-        console.log('addTask: ', response.data);
+    ...mapActions(['getCurDateTime','addTodo','getTodo','patchDelTodo','patchDoneTodo']),
+    ...mapMutations(['SET_NEW_TODO']),
 
-        this.todos.list_id = response.data.list_id;
-        this.todos.items = response.data.items;
-        
-        this.newTodo = '';
-      } catch(err){
-        console.log('addTask: ', err)
-      }
+    handleUpdateNewTodo(event) {
+      updateNewTodo(this.SET_NEW_TODO, event);
+    },
+    handleDeleteTodo(itemId) {
+      deleteTodo(this.patchDelTodo, this.getTodo, itemId);
+    },
+    handleUpdateCpltStatus(itemId, isCompleted) {
+      updateCpltStatus(this.patchDoneTodo, this.getTodo, itemId, isCompleted);
     }
   },
   mounted() {
     this.getCurDateTime();
-    console.log(this.todos.length);
+    this.getTodo();
   },
-  computed: {
-    completedTaskCount() {
-      return this.todos.items.filter(item => item.is_cpt === 'Y').length;
-    },
-    completionRate() {
-      if (this.todos.items.length === 0) {
-        return 0;
-      }
-      return ((this.completedTaskCount / this.todos.items.length) * 100).toFixed(2);
-    }
-  }
 }
 </script>
 

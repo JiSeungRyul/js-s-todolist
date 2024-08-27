@@ -7,5 +7,8 @@ export const mutations = {
     },
     SET_TODOS(state, todos) {
         state.todos = todos;
-    }
+    },
+    SET_SELECTED_DATE(state, date) {
+        state.selectedDate = date;
+      },
 }

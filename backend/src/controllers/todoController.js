@@ -63,10 +63,12 @@ const addTodo = (req, res) => {
 }
 
 const getTodo = (req, res) => {
+    const { itemDate } = req.body;
+    
     const tmp_usr_id = 1; //Must be modified to usr_id later
-
-    const getTitleQry = 'SELECT list_id FROM TODOLISTS WHERE DATE(reg_date) = CURDATE() AND usr_id = ?';
-    pool.query(getTitleQry, [tmp_usr_id], (getTitleErr, getTitleRslt) => {
+    console.log(itemDate);
+    const getTitleQry = 'SELECT list_id FROM TODOLISTS WHERE DATE(reg_date) = DATE(?) AND usr_id = ?';
+    pool.query(getTitleQry, [itemDate, tmp_usr_id], (getTitleErr, getTitleRslt) => {
         if (getTitleErr) {
             console.error('MySQL Select Error: ', getTitleErr);
             return res.status(500).json({ getTitleErr: 'Database error' });

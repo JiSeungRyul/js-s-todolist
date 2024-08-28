@@ -6,9 +6,12 @@ export const actions = {
         const curDateTime = new Date().toLocaleDateString('en-US', options);
         commit('SET_CUR_DATE_TIME', curDateTime);
     },
-    async getTodo({ commit }){
+    async getTodo({ commit, state }){
         try {
-            const response = await axios.get('http://localhost:5000/api/todos');
+            console.log(state.selectedDate); 
+            const response = await axios.get('http://localhost:5000/api/todos', {
+                itemDate: state.selectedDate,
+            });
             commit('SET_TODOS', response.data);
         } catch(err) {
             console.log('getTodo: ', err);
@@ -48,5 +51,5 @@ export const actions = {
             console.log('patchChkCplt: ', err);
             throw err;
         }
-    }
+    },
 }

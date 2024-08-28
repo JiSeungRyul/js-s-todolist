@@ -66,7 +66,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getCurDateTime','addTodo','getTodo','patchDelTodo','patchDoneTodo']),
+    ...mapActions(['getCurDateTime','addTodo','getTodo','patchDelTodo','patchDoneTodo','getTodoByDate']),
     ...mapMutations(['SET_NEW_TODO','SET_SELECTED_DATE']),
 
     handleUpdateNewTodo(event) {
@@ -82,13 +82,13 @@ export default {
       const newDate = new Date(this.selectedDate);
       newDate.setDate(newDate.getDate() - 1);
       this.SET_SELECTED_DATE(newDate);
-      // this.getTodoByDate();
+      this.getTodo();
     },
     nextDay(){
       const newDate = new Date(this.selectedDate);
       newDate.setDate(newDate.getDate() + 1);
       this.SET_SELECTED_DATE(newDate);
-      // this.getTodoByDate();
+      this.getTodo();
     }
   },
   mounted() {

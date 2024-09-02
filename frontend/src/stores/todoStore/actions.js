@@ -8,9 +8,8 @@ export const actions = {
     },
     async getTodo({ commit, state }){
         try {
-            console.log(state.selectedDate); 
             const response = await axios.get('http://localhost:5000/api/todos', {
-                itemDate: state.selectedDate,
+                params: { itemDate: state.selectedDate },
             });
             commit('SET_TODOS', response.data);
         } catch(err) {

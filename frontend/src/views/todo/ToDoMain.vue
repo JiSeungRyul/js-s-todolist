@@ -15,9 +15,10 @@
         :value="newTodo"
         placeholder="What to do next..."
         @input="handleUpdateNewTodo"
-        @keyup.enter="addTodo"
+        @keyup.enter="addNewTodo"
         :disabled="!isToday"
       />
+      <button @click="addNewTodo">+</button>
       <p>--------------------------</p>
       <p>What to do today...</p>
       <ul v-if="todos && todos.items.length">
@@ -42,7 +43,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
-import { updateNewTodo, deleteTodo, updateCpltStatus } from '@/utils/todoMethods';
 
 export default {
   name: 'ToDoMain',
@@ -87,17 +87,39 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getCurDateTime','addTodo','getTodo','patchDelTodo','patchDoneTodo','getTodoByDate']),
+    ...mapActions(['getCurDateTime', 'addTodo', 'getTodo', 'patchDelTodo', 'patchDoneTodo']),
     ...mapMutations(['SET_NEW_TODO','SET_SELECTED_DATE']),
 
     handleUpdateNewTodo(event) {
-      updateNewTodo(this.SET_NEW_TODO, event);
+      this.SET_NEW_TODO(event.target.value);
     },
-    handleDeleteTodo(itemId) {
-      deleteTodo(this.patchDelTodo, this.getTodo, itemId);
+    async addNewTodo() {
+      if (!this.newTodo || this.newTodo.trim() === '') {
+        alert('Please write to do');
+        return;
+      }
+      try {
+        await this.addTodo();
+        this.SET_NEW_TODO('');
+      } catch (error) {
+        alert('Failed to add to-do. Please try again.');
+      }
     },
-    handleUpdateCpltStatus(itemId, isCompleted) {
-      updateCpltStatus(this.patchDoneTodo, this.getTodo, itemId, isCompleted);
+    async handleDeleteTodo(itemId) {
+      try {
+        await this.patchDelTodo(itemId);
+        alert('To-do deleted successfully');
+      } catch (error) {
+        alert('Failed to delete. Please try again.');
+      }
+    },
+    async handleUpdateCpltStatus(itemId, isCompleted) {
+      const isCpt = isCompleted ? 'Y' : 'N';
+      try {
+        await this.patchDoneTodo({ itemId, isCpt });
+      } catch (error) {
+        alert('Failed to update status. Please try again.');
+      }
     },
     prevDay(){
       const newDate = new Date(this.selectedDate);

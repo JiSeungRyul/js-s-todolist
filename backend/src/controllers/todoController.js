@@ -63,10 +63,8 @@ const addTodo = (req, res) => {
 }
 
 const getTodo = (req, res) => {
-    const { itemDate } = req.body;
-    
+    const { itemDate } = req.query;
     const tmp_usr_id = 1; //Must be modified to usr_id later
-    console.log(itemDate);
     const getTitleQry = 'SELECT list_id FROM TODOLISTS WHERE DATE(reg_date) = DATE(?) AND usr_id = ?';
     pool.query(getTitleQry, [itemDate, tmp_usr_id], (getTitleErr, getTitleRslt) => {
         if (getTitleErr) {

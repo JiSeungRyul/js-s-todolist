@@ -19,6 +19,8 @@ services:
       - to-do-network
     command: npm run serve        # DevMode
     # command: npm run build        # OPMode
+    depends_on:
+      - to-do-mysql
     restart: always
 
   to-do-backend: 
@@ -51,6 +53,7 @@ services:
       - "${MYSQL_PORT}:3306"
     env_file:
       - .env
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - mysql-data:/var/lib/mysql
       - ./init-db/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -64,3 +67,4 @@ networks:
   
 volumes:
   mysql-data:
+    external: false

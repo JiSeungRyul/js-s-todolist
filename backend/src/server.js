@@ -1,23 +1,27 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 5000;
+const port = process.env.SERVER_PORT;
+
+const todoRoute = require('./routes/todosRoute');
 
 app.use(cors());
 app.use(express.json());
 
+//test
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello!!! Welcome to my apps!!!')
 });
 
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'API is working!!! plz...!!!' });
-  });
-
-app.post('/api/tasks', (req,res) => {
-  const { title, completed } = req.body;
-  console.log('req data: ', { title, completed });
+//test
+app.get('/api', (req, res) => {
+  res.send('Hello!!! Welcome to my apps!!! 222')
 });
+
+//to-do
+app.use('/api',todoRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

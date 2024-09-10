@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/JiSeungRyul/sr-todo-list/issues"
   },
-  "homepage": "https://github.com/JiSeungRyul/sr-todo-list#readme"
+  "homepage": "https://github.com/JiSeungRyul/sr-todo-list#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
 }

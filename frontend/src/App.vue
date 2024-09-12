@@ -1,32 +1,22 @@
 <template>
     <div id="app">
-        <nav>
-            <router-link to="/">Home</router-link> |
-            <router-link to="/todo">ToDo</router-link>
-        </nav>
-        <router-view :key="$route.fullPath" />
+      <NavBar></NavBar>
+      <router-view :key="$route.fullPath" />
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import NavBar from '@/components/common/NavBar.vue'
 
 export default {
   name: 'App',
+  components: {
+    NavBar
+  },
   data() {
     return {
       message: ''
     };
-  },
-  methods: {
-    async fetchMessage() {
-      try {
-        const response = await axios.get('http://localhost:5000/api/test');
-        this.message = response.data.message;
-      } catch (error) {
-        console.error('Error fetching message:', error);
-      }
-    }
   }
 };
 </script>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AppHome from '../views/common/AppHome.vue';
 import ToDoMain from '../views/todo/ToDoMain.vue';
+import QuoteOfTheDay from '../views/qotd/QuoteOfTheDay.vue';
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/todo',
     name: 'ToDoMain',
     component: ToDoMain
+  },
+  {
+    path: '/qotd',
+    name: 'QuoteOfTheDay',
+    component: QuoteOfTheDay
   }
 ];
 

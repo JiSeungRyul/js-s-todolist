@@ -44,3 +44,15 @@ CREATE TABLE `TODOITEMS` (
   PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ;
+
+
+CREATE TABLE quotes (
+    `quote_id` INT NOT NULL AUTO_INCREMENT,
+    `quote` TEXT NOT NULL,
+    `author` VARCHAR(255) NOT NULL,
+    `date` DATE NOT NULL,
+    `reg_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`quote_id`),
+    UNIQUE (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+;

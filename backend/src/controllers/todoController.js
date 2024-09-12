@@ -11,16 +11,16 @@ const addTodo = (req, res) => {
 
         pool.query(putItemQry, [listId, itemTitle, dueDate], (putErr, putRslt) => {
             if (putErr) {
-                console.error('MySQL Insert Error: ', putErr);
-                return res.status(500).json({ putErr: 'Database error' });
+                console.error('MySQL Error: ', putErr);
+                return res.status(500).json({ err: 'Database error' });
             }
 
             const getItemQry = 'SELECT item_id, item_title, is_cpt, due_date FROM TODOITEMS WHERE list_id = ? AND is_deleted = 0';
 
             pool.query(getItemQry, [listId], (getErr, getRslt) => {
                 if (getErr) {
-                    console.error('MySQL Insert Error: ', getErr);
-                    return res.status(500).json({ getErr: 'Database error' });
+                    console.error('MySQL Error: ', getErr);
+                    return res.status(500).json({ err: 'Database error' });
                 }
 
                 return res.status(201).json({
@@ -37,7 +37,7 @@ const addTodo = (req, res) => {
     pool.query(GetTitleQry, [tmp_usr_id], (getErr, getRslt) => {
         if (getErr) {
             console.error('MySQL Insert Error: ', getErr);
-            return res.status(500).json({ getErr: 'Database error' });
+            return res.status(500).json({ err: 'Database error' });
         }
 
         let listId;
@@ -52,7 +52,7 @@ const addTodo = (req, res) => {
             pool.query(putTitleQry,[tmp_usr_id, todayTitle], (putErr, putRslt) => {
                 if (putErr) {
                   console.error('MySQL Insert Error: ', putErr);
-                  return res.status(500).json({ putErr: 'Database error' });
+                  return res.status(500).json({ err: 'Database error' });
                 } 
                 listId = putRslt.insertId;
                 putItem(listId);
@@ -68,8 +68,8 @@ const getTodo = (req, res) => {
     const getTitleQry = 'SELECT list_id FROM TODOLISTS WHERE DATE(reg_date) = DATE(?) AND usr_id = ?';
     pool.query(getTitleQry, [itemDate, tmp_usr_id], (getTitleErr, getTitleRslt) => {
         if (getTitleErr) {
-            console.error('MySQL Select Error: ', getTitleErr);
-            return res.status(500).json({ getTitleErr: 'Database error' });
+            console.error('MySQL Error: ', getTitleErr);
+            return res.status(500).json({ err: 'Database error' });
         }
         let listId;
         if (getTitleRslt.length > 0){
@@ -79,8 +79,8 @@ const getTodo = (req, res) => {
 
             pool.query(getItemQry, [listId], (getItemErr, getItemRslt) => {
                 if (getItemErr) {
-                    console.error('MySQL Select Error: ', getItemErr);
-                    return res.status(500).json({ getItemErr: 'Database error' });
+                    console.error('MySQL Error: ', getItemErr);
+                    return res.status(500).json({ err: 'Database error' });
                 }
 
                 return res.status(200).json({
@@ -103,8 +103,8 @@ const delTodo = (req, res) => {
 
     pool.query(uptDelItemQry, [listId, itemId], (uptErr, uptRslt) => {
         if (uptErr) {
-            console.error('MySQL Update Error: ', uptErr);
-            return res.status(500).json({ uptErr: 'Database error' });
+            console.error('MySQL Error: ', uptErr);
+            return res.status(500).json({ err: 'Database error' });
         }
         return res.status(200).json({ message: 'Todo item deleted successfully' });
     });
@@ -118,8 +118,8 @@ const uptTodoDone = (req, res) => {
 
     pool.query(uptDoneTodo, [isCpt, listId, itemId], (uptErr, uptRslt) => {
         if (uptErr) {
-            console.error('MySQL Update Error: ', uptErr);
-            return res.status(500).json({ uptErr: 'Database error' });
+            console.error('MySQL Error: ', uptErr);
+            return res.status(500).json({ err: 'Database error' });
         }
         return res.status(200).json({ message: 'Todo completed updated successfully' });
     });

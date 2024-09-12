@@ -1,3 +1,6 @@
+/****************************
+ * 추후 mysql2로 upgrade 필요*
+ ****************************/
 const mysql = require('mysql');
 
 const pool = mysql.createPool({
